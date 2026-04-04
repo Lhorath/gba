@@ -9,6 +9,28 @@ window.onload = () => {
 
     gba.setCanvas(canvas);
 
+    // gbajs needs a real GBA BIOS mapped at 0x0000000 (see official demo: resources/bios.bin).
+    let biosPromise = null;
+    function ensureBios() {
+        if (biosPromise) {
+            return biosPromise;
+        }
+        biosPromise = (async () => {
+            const res = await fetch('bios/bios.bin');
+            if (!res.ok) {
+                throw new Error(
+                    'Missing GBA BIOS. Add a 16 KB dump as bios/bios.bin next to index.php (same folder as roms.json), then reload.'
+                );
+            }
+            const bios = await res.arrayBuffer();
+            if (bios.byteLength !== 16384) {
+                throw new Error(`bios/bios.bin must be exactly 16384 bytes (got ${bios.byteLength}).`);
+            }
+            gba.setBios(bios, false);
+        })();
+        return biosPromise;
+    }
+
     // --- Helper Functions ---
     function showMessage(message, isError = false) {
         loadingMessage.textContent = message;
@@ -52,6 +74,8 @@ window.onload = () => {
 
         showMessage(`Loading ${currentGameName}...`);
         try {
+            await ensureBios();
+            gba.pause();
             const response = await fetch(romPath);
             if (!response.ok) {
                 throw new Error(`404 Not Found: Could not find the ROM file at '${romPath}'. Check your roms.json file and folder structure.`);
@@ -111,8 +135,11 @@ window.onload = () => {
                 } else {
                     showMessage('Failed to import save. It may be for a different game.', true);
                 }
+                importSaveInput.value = '';
             };
             reader.readAsArrayBuffer(file);
+        } else {
+            importSaveInput.value = '';
         }
     });
 
@@ -149,10 +176,18 @@ window.onload = () => {
             button.addEventListener('mouseleave', () => gba.keypad.release(GBA.KEY[gbaKey]));
             button.addEventListener('touchstart', (e) => { e.preventDefault(); gba.keypad.press(GBA.KEY[gbaKey]); }, { passive: false });
             button.addEventListener('touchend', (e) => { e.preventDefault(); gba.keypad.release(GBA.KEY[gbaKey]); }, { passive: false });
+            button.addEventListener('touchcancel', () => { gba.keypad.release(GBA.KEY[gbaKey]); });
         }
     });
 
     // --- Initialisation ---
-    // Load the list of ROMs into the selector
     populateRomSelector();
+    showMessage('Checking BIOS…');
+    ensureBios()
+        .then(() => {
+            showMessage('Select a game to begin.');
+        })
+        .catch((e) => {
+            showMessage(e.message, true);
+        });
 };

@@ -21,10 +21,11 @@
 <script src="https://endrift.github.io/gbajs/js/keypad.js"></script>
 <script src="https://endrift.github.io/gbajs/js/savedata.js"></script>
 <script src="https://endrift.github.io/gbajs/js/gpio.js"></script>
-<script src="https://endrift.github.io/gbajs/js/gba.js"></script>
-<script src="https://endrift.github.io/gbajs/resources/xhr.js"></script>
-<!-- Link to the external stylesheet -->
-<link rel="stylesheet" href="style.css">
+    <script src="https://endrift.github.io/gbajs/js/gba.js"></script>
+    <script src="https://endrift.github.io/gbajs/resources/xhr.js"></script>
+    <script src="gbajs-bridge.js"></script>
+    <!-- Link to the external stylesheet -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
 
@@ -113,9 +114,6 @@
         </div>
     </div>
 
-    <!-- GBA.js Emulator Core -->
-    <script src="https://cdn.jsdelivr.net/gh/endless-sky/gbajs/gbajs.min.js"></script>
-    <!-- Link to the external JavaScript file with defer attribute -->
     <script src="app.js" defer></script>
 </body>
 </html>
