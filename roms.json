@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Pokémon Emerald",
+    "path": "./rom/emerald.gba"
+  },
+  {
+    "name": "Metroid Fusion",
+    "path": "./roms/metroid-fusion.gba"
+  },
+  {
+    "name": "The Legend of Zelda - The Minish Cap",
+    "path": "./roms/zelda-minish-cap.gba"
+  }
+]
