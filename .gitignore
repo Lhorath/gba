@@ -1,2 +1,29 @@
+# GBA-specific: BIOS and ROMs must not be distributed
 bios/
 roms/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Dependencies
+vendor/
+node_modules/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+.AppleDouble
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*~
